@@ -1,23 +1,19 @@
-provider "aws" {
-  region = "ap-southeast-1"
-}
-
 module "vpc" {
   source = "./modules/vpc"
 }
 
 module "ec2" {
-  source        = "./modules/ec2"
-  vpc_id        = module.vpc.vpc_id
-  subnet_ids    = module.vpc.public_subnets
-  key_name      = var.key_name
+  source     = "./modules/ec2"
+  vpc_id     = module.vpc.vpc_id
+  subnet_ids = module.vpc.public_subnets
+  key_name   = var.key_name
 }
 
 module "rds" {
-  source        = "./modules/rds"
-  subnet_ids    = module.vpc.private_subnets
-  db_user       = var.db_user
-  db_pass       = var.db_pass
+  source     = "./modules/rds"
+  subnet_ids = module.vpc.private_subnets
+  db_user    = var.db_user
+  db_pass    = var.db_pass
 }
 
 module "redis" {
@@ -28,7 +24,7 @@ module "redis" {
 module "alb" {
   source       = "./modules/alb"
   subnet_ids   = module.vpc.public_subnets
-  target_ec2  = module.ec2.instance_ids
+  target_ec2   = module.ec2.instance_ids
 }
 
 module "s3" {
